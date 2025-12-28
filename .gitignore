@@ -1,0 +1,18 @@
+# dependencies
+node_modules/
+
+# builds and coverage
+dist/
+coverage/
+
+# logs and caches
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.turbo/
+.vite/
+.vitest/
+
+# OS noise
+.DS_Store

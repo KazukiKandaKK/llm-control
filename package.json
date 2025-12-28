@@ -1,0 +1,16 @@
+{
+  "name": "llm-control",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.3",
+    "typescript": "^5.4.0",
+    "vitest": "^1.5.0"
+  }
+}
