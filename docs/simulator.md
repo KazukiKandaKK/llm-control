@@ -17,10 +17,38 @@
 
 ```ts
 import { PseudoLLMServer } from "../sim/pseudoLLM";
-import { AdmissionController, /* deps... */ } from "../src";
+import {
+  AdmissionController,
+  TokenLimiter,
+  ConcurrencyLimiter,
+  EWMAEstimator,
+  BasicSignalClassifier
+} from "../src";
+import { InMemoryTelemetry } from "../src/telemetry/inMemoryTelemetry";
 
 // 20% の確率で 429 を返すサーバ
 const server = new PseudoLLMServer({ rateLimitChance: 0.2 });
+
+const config = {
+  queue: { enabled: true, maxSize: 100, timeoutMs: 500 },
+  tokenLimiter: {
+    rInit: 500, rMin: 50, rMax: 5000,
+    bucketSize: 2000, additiveStep: 50,
+    beta: 0.7, betaSoft: 0.85, settlementMode: "debt"
+  },
+  concurrencyLimiter: {
+    cwndInit: 4, cwndMin: 1, cwndMax: 64,
+    betaC: 0.7, delayDecrease: 0.9, delayThresholdMs: 50
+  }
+};
+
+const controller = new AdmissionController(config, {
+  costEstimator: new EWMAEstimator(),
+  tokenLimiter: new TokenLimiter(config.tokenLimiter),
+  concurrencyLimiter: new ConcurrencyLimiter(config.concurrencyLimiter),
+  signalClassifier: new BasicSignalClassifier(),
+  telemetry: new InMemoryTelemetry()
+});
 
 const { result, meta } = await controller.run(
   { provider: "sim", model: "demo", inputText: "hello" },
