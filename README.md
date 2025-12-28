@@ -1,6 +1,6 @@
 # LLM Control
 
-LLM API 呼び出しのためのトークン帯域 + 同時実行数制御 TypeScript SDK。`llm_congestion_control_spec.md` に準拠。
+LLM API 呼び出しのためのトークン帯域 + 同時実行数制御 TypeScript SDK。
 
 ## 概要
 
